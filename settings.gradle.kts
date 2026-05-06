@@ -17,3 +17,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "iana-time-zone-kotlin"
+
