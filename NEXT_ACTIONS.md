@@ -5,13 +5,13 @@ Based on AST analysis, here are the concrete next steps.
 ## Summary
 
 - **Files Present:** 17/17 (100.0%)
-- **Function parity:** 130/143 matched (target 152) — 90.9%
+- **Function parity:** 129/143 matched (target 154) — 90.2%
 - **Class/type parity:** 11/13 matched (target 48) — 84.6%
-- **Combined symbol parity:** 141/156 matched (target 200) — 90.4%
-- **Average inline-code cosine:** 0.56 (function body across 17 matched files)
+- **Combined symbol parity:** 140/156 matched (target 202) — 89.7%
+- **Average inline-code cosine:** 0.51 (function body across 17 matched files)
 - **Average documentation cosine:** 0.21 (doc text across 17 matched files)
-- **Cheat-zeroed Files:** 1
-- **Critical Issues:** 6 files with <0.60 function similarity
+- **Cheat-zeroed Files:** 2
+- **Critical Issues:** 7 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
 
@@ -102,13 +102,24 @@ Every matched file is listed below with function and type symbol parity.
 - **Similarity:** 0.75
 - **Dependents:** 0
 - **Priority Score:** 10202.5
-- **Functions:** 1/2 matched
+- **Functions:** 1/2 matched (target 4)
 - **Missing functions:** `pass`
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
 - **Tests:** 0/1 matched
 
-### 8. tz_ohos
+### 8. platform
+
+- **Target:** `ianatimezone.Platform [ZERO]`
+- **Similarity:** 0.00
+- **Dependents:** 0
+- **Priority Score:** 10110.0
+- **Functions:** 0/1 matched (target 0)
+- **Missing functions:** `get_timezone_inner`
+- **Types:** 0/0 matched (target 1)
+- **Missing types:** _none_
+
+### 9. tz_ohos
 
 - **Target:** `ianatimezone.TzOhos`
 - **Similarity:** 0.80
@@ -119,18 +130,18 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 1/1 matched (target 2)
 - **Missing types:** _none_
 
-### 9. tz_android
+### 10. tz_android
 
 - **Target:** `ianatimezone.TzAndroid`
 - **Similarity:** 0.78
 - **Dependents:** 0
 - **Priority Score:** 202.2
-- **Functions:** 2/2 matched (target 4)
+- **Functions:** 2/2 matched (target 5)
 - **Missing functions:** _none_
 - **Types:** 0/0 matched (target 2)
 - **Missing types:** _none_
 
-### 10. tz_wasm32_wasi
+### 11. tz_wasm32_wasi
 
 - **Target:** `ianatimezone.TzWasm32Wasi`
 - **Similarity:** 0.25
@@ -141,7 +152,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
 
-### 11. tz_netbsd
+### 12. tz_netbsd
 
 - **Target:** `ianatimezone.TzNetbsd`
 - **Similarity:** 0.61
@@ -152,7 +163,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
 
-### 12. tz_wasm32_emscripten
+### 13. tz_wasm32_emscripten
 
 - **Target:** `ianatimezone.TzWasm32Emscripten`
 - **Similarity:** 0.61
@@ -163,7 +174,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
 
-### 13. tz_haiku
+### 14. tz_haiku
 
 - **Target:** `ianatimezone.TzHaiku`
 - **Similarity:** 0.62
@@ -174,7 +185,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
 
-### 14. tz_aix
+### 15. tz_aix
 
 - **Target:** `ianatimezone.TzAix`
 - **Similarity:** 0.62
@@ -185,7 +196,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
 
-### 15. tz_illumos
+### 16. tz_illumos
 
 - **Target:** `ianatimezone.TzIllumos`
 - **Similarity:** 0.71
@@ -196,23 +207,12 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
 
-### 16. tz_freebsd
+### 17. tz_freebsd
 
 - **Target:** `ianatimezone.TzFreebsd`
 - **Similarity:** 0.74
 - **Dependents:** 0
 - **Priority Score:** 102.6
-- **Functions:** 1/1 matched
-- **Missing functions:** _none_
-- **Types:** 0/0 matched (target 1)
-- **Missing types:** _none_
-
-### 17. platform
-
-- **Target:** `ianatimezone.Platform`
-- **Similarity:** 0.85
-- **Dependents:** 0
-- **Priority Score:** 101.5
 - **Functions:** 1/1 matched
 - **Missing functions:** _none_
 - **Types:** 0/0 matched (target 1)
@@ -232,7 +232,7 @@ For each file to be considered "complete":
 ```bash
 # Initialize task queue for systematic porting
 cd tools/ast_distance
-./ast_distance --init-tasks ../../tmp/iana-time-zone/src rust ../../src/commonMain/kotlin/io/github/kotlinmania/ianatimezone kotlin tasks.json ../../AGENTS.md
+./ast_distance --init-tasks ../../tmp/iana-time-zone/src rust ../../src kotlin tasks.json ../../AGENTS.md
 
 # Get next high-priority task
 ./ast_distance --assign tasks.json <agent-id>
