@@ -1,7 +1,7 @@
 // port-lint: source tz_android.rs
 package io.github.kotlinmania.ianatimezone
 
-import android.icu.util.TimeZone
+import io.github.kotlinmania.androidsystemproperties.AndroidSystemProperties
 import io.github.kotlinmania.ianatimezone.FfiUtils.androidTimezonePropertyName
 
 internal object TzAndroid {
@@ -23,19 +23,6 @@ internal object TzAndroid {
     }
 }
 
-internal class AndroidSystemProperties private constructor() {
-    fun getFromCString(key: ByteArray): String? = androidSystemProperty(key)
-
-    companion object {
-        fun new(): AndroidSystemProperties = AndroidSystemProperties()
-    }
-}
-
-private fun androidSystemProperty(key: ByteArray): String? {
-    val nulIndex = key.indexOf(0.toByte())
-    val name = key.decodeToString(endIndex = if (nulIndex >= 0) nulIndex else key.size)
-    return when (name) {
-        "persist.sys.timezone" -> TimeZone.getDefault().id.takeIf { it.isNotEmpty() }
-        else -> null
-    }
+internal actual object Platform {
+    actual fun getTimezoneInner(): Result<String> = TzAndroid.getTimezoneInner()
 }
