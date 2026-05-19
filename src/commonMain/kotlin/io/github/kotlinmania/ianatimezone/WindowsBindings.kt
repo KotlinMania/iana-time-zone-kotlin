@@ -306,7 +306,7 @@ object WindowsBindings {
 }
 
 object WindowsCore {
-    class IUnknown
+    open class IUnknown
     class IInspectable : IUnknown()
     data class HString(private val value: String) {
         override fun toString(): String = value
