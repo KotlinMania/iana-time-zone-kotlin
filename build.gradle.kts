@@ -310,7 +310,7 @@ kotlin {
         val wasmJsMain by getting {
             dependencies {
                 implementation("io.github.kotlinmania:js-sys-kotlin:0.1.0")
-                implementation("io.github.kotlinmania:log-kotlin:0.1.0")
+                implementation("io.github.kotlinmania:log-kotlin:0.1.1")
                 implementation("io.github.kotlinmania:wasm-bindgen-kotlin:0.1.0")
             }
         }
