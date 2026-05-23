@@ -199,7 +199,11 @@ kotlin {
         binaries.framework { baseName = "IanaTimeZone"; xcf.add(this) }
     }
     iosSimulatorArm64 {
-        binaries.framework { baseName = "IanaTimeZone"; xcf.add(this) }
+        binaries.framework {
+            baseName = "IanaTimeZone"
+            isStatic = true
+            xcf.add(this)
+        }
     }
     iosX64 {
         binaries.framework { baseName = "IanaTimeZone"; xcf.add(this) }
