@@ -1,5 +1,6 @@
 {
-  "type": "port",
+  "type": "inventory",
+  "parity_mode": false,
   "name": "iana-time-zone-kotlin",
   "source": {
     "path": "tmp/iana-time-zone/src",
