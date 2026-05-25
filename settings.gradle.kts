@@ -17,8 +17,3 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "iana-time-zone-kotlin"
-
-val androidSystemPropertiesBuild = file("../android-system-properties-kotlin")
-if (androidSystemPropertiesBuild.isDirectory) {
-    includeBuild(androidSystemPropertiesBuild)
-}
