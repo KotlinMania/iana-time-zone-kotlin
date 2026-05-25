@@ -3,46 +3,34 @@ package io.github.kotlinmania.ianatimezone
 
 import io.github.kotlinmania.androidsystemproperties.AndroidSystemProperties
 import io.github.kotlinmania.ianatimezone.FfiUtils.androidTimezonePropertyName
-import java.util.TimeZone as JavaTimeZone
 
 internal object TzAndroid {
     /**
-     * Resolves the current zone the same way the upstream Rust crate does on
-     * Android: reads the `persist.sys.timezone` system property through the
-     * Bionic ABI exposed by `android-system-properties-kotlin`.
+     * Faithful port of upstream `tz_android::get_timezone_inner`:
+     * `android_system_properties::AndroidSystemProperties::new()` then
+     * `properties.get_from_cstr(key)`. Kotlin uses
+     * `android-system-properties-kotlin`, the workspace port of the same
+     * Rust crate.
      *
-     * The Android KMP `androidMain` source set compiles for the Android JVM
-     * runtime AND runs through `testAndroidHostTest` against a plain host
-     * JVM that has no `android.os.SystemProperties` class on its classpath.
-     * On the host JVM the reflective lookup returns `null` — and the value
-     * we want is sitting right next to us in `java.util.TimeZone.getDefault()`,
-     * which Android itself populates from the same `persist.sys.timezone`
-     * property. So when the Bionic-backed lookup fails, fall back to the
-     * standard JVM API. The two paths agree on real Android and the JVM
-     * fallback also produces a meaningful answer on host test runners.
+     * `testAndroidHostTest` runs this `androidMain` code on a plain host
+     * JVM that has no `android.os.SystemProperties` class. The
+     * `android-system-properties-kotlin` reflective lookup returns
+     * `null` there. The Rust crate's `cfg(target_os = "android")`
+     * dispatch would have selected `tz_linux.rs` (or another `std::fs`
+     * port) when not on real Android; we mirror that by falling through
+     * to [TzPosixFs] — the same `std::fs` port — so the host test
+     * runs against real `/etc/localtime` on Linux/macOS CI runners.
      */
     fun getTimezoneInner(): Result<String> {
         val key = androidTimezonePropertyName()
-        val fromBionic = getProperties()?.getFromCString(key)
+        val fromBionic = properties.getFromCString(key)
         if (fromBionic != null) {
             return Result.success(fromBionic)
         }
-        val fromJvm = JavaTimeZone.getDefault().id
-        return if (fromJvm.isNullOrEmpty()) {
-            Result.failure(GetTimezoneError.OsError.toBridge())
-        } else {
-            Result.success(fromJvm)
-        }
+        return TzPosixFs.getTimezoneInner()
     }
 
-    private var properties: AndroidSystemProperties? = null
-
-    private fun getProperties(): AndroidSystemProperties? {
-        if (properties == null) {
-            properties = AndroidSystemProperties.new()
-        }
-        return properties
-    }
+    private val properties: AndroidSystemProperties by lazy { AndroidSystemProperties.new() }
 }
 
 internal actual object Platform {
