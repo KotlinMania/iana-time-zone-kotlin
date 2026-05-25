@@ -99,3 +99,7 @@ internal class StringRef<T> private constructor(
 // (kCFStringEncodingUTF8) are now provided by the published sibling
 // `io.github.kotlinmania:core-foundation-sys-kotlin` — see the imports
 // at the top of this file.
+
+internal actual object Platform {
+    actual fun getTimezoneInner(): Result<String> = TzDarwin.getTimezoneInner()
+}
