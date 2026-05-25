@@ -17,7 +17,7 @@ import io.github.kotlinmania.ianatimezone.FfiUtils.Buffer.tznameBuf
 
 internal object TzDarwin {
     fun getTimezoneInner(): Result<String> =
-        getTimezone()?.let { Result.success(it) } ?: Result.failure(GetTimezoneError.OsError)
+        getTimezone()?.let { Result.success(it) } ?: Result.failure(GetTimezoneError.OsError.toBridge())
 
     private fun getTimezone(): String? {
         val buf = tznameBuf()
