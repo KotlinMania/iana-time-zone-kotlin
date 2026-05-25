@@ -234,9 +234,6 @@ kotlin {
         binaries.framework { baseName = "IanaTimeZone"; xcf.add(this) }
     }
 
-    watchosArm32 {
-        binaries.framework { baseName = "IanaTimeZone"; xcf.add(this) }
-    }
     watchosArm64 {
         binaries.framework { baseName = "IanaTimeZone"; xcf.add(this) }
     }
@@ -647,8 +644,6 @@ val fullTargetBuildTaskNames = setOf(
     "tvosArm64TestBinaries",
     "tvosSimulatorArm64Binaries",
     "tvosSimulatorArm64TestBinaries",
-    "watchosArm32Binaries",
-    "watchosArm32TestBinaries",
     "watchosArm64Binaries",
     "watchosArm64TestBinaries",
     "watchosDeviceArm64Binaries",
