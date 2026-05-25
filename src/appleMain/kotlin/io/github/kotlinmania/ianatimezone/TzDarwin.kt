@@ -1,6 +1,17 @@
 // port-lint: source tz_darwin.rs
 package io.github.kotlinmania.ianatimezone
 
+import io.github.kotlinmania.corefoundationsys.CFStringRef
+import io.github.kotlinmania.corefoundationsys.CFTimeZoneRef
+import io.github.kotlinmania.corefoundationsys.base.CFRange
+import io.github.kotlinmania.corefoundationsys.cfRelease
+import io.github.kotlinmania.corefoundationsys.cfStringGetBytes
+import io.github.kotlinmania.corefoundationsys.cfStringGetCStringPtr
+import io.github.kotlinmania.corefoundationsys.cfStringGetLength
+import io.github.kotlinmania.corefoundationsys.cfTimeZoneCopySystem
+import io.github.kotlinmania.corefoundationsys.cfTimeZoneGetName
+import io.github.kotlinmania.corefoundationsys.cfTimeZoneResetSystem
+import io.github.kotlinmania.corefoundationsys.string.kCFStringEncodingUTF8
 import io.github.kotlinmania.ianatimezone.FfiUtils.Buffer.MAX_LEN
 import io.github.kotlinmania.ianatimezone.FfiUtils.Buffer.tznameBuf
 
@@ -59,7 +70,7 @@ internal class StringRef<T> private constructor(
     private val string: CFStringRef,
     private val parent: T,
 ) {
-    fun asUtf8(): String? = cfStringGetCStringPtr(string, CF_STRING_ENCODING_UTF8)
+    fun asUtf8(): String? = cfStringGetCStringPtr(string, kCFStringEncodingUTF8)
 
     fun toUtf8(buf: ByteArray): String? {
         val length = cfStringGetLength(string)
@@ -67,7 +78,7 @@ internal class StringRef<T> private constructor(
         val convertedBytes = cfStringGetBytes(
             string,
             range,
-            CF_STRING_ENCODING_UTF8,
+            kCFStringEncodingUTF8,
             0u,
             false,
             buf,
@@ -84,8 +95,7 @@ internal class StringRef<T> private constructor(
     }
 }
 
-internal data class CFRange(val location: Int, val length: Int)
-internal class CFTimeZoneRef
-internal class CFStringRef
-
-internal const val CF_STRING_ENCODING_UTF8: UInt = 0x08000100u
+// CFRange, CFTimeZoneRef, CFStringRef, and the UTF-8 encoding constant
+// (kCFStringEncodingUTF8) are now provided by the published sibling
+// `io.github.kotlinmania:core-foundation-sys-kotlin` — see the imports
+// at the top of this file.
