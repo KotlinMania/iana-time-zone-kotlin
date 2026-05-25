@@ -297,8 +297,6 @@ kotlin {
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation("io.github.kotlinmania:chrono-tz-kotlin:0.1.0")
-                implementation("io.github.kotlinmania:getrandom-kotlin:0.1.0")
             }
         }
         val androidMain by getting {
@@ -316,30 +314,6 @@ kotlin {
                 implementation("io.github.kotlinmania:core-foundation-sys-kotlin:0.1.2")
             }
         }
-        val mingwMain by getting {
-            dependencies {
-                implementation("io.github.kotlinmania:windows-core-kotlin:0.1.0")
-            }
-        }
-        val nativeMain by getting {
-            dependencies {
-                implementation("io.github.kotlinmania:iana-time-zone-haiku-kotlin:0.1.1")
-            }
-        }
-        val wasmJsMain by getting {
-            dependencies {
-                implementation("io.github.kotlinmania:js-sys-kotlin:0.1.0")
-                implementation("io.github.kotlinmania:log-kotlin:0.1.1")
-                implementation("io.github.kotlinmania:wasm-bindgen-kotlin:0.1.0")
-            }
-        }
-        val wasmJsTest by getting {
-            dependencies {
-                implementation("io.github.kotlinmania:getrandom-kotlin:0.1.0")
-                implementation("io.github.kotlinmania:wasm-bindgen-test-kotlin:0.1.0")
-            }
-        }
-
     }
     jvmToolchain(21)
 }

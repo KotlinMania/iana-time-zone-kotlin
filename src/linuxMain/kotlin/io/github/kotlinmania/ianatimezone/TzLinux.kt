@@ -1,6 +1,10 @@
 // port-lint: source tz_linux.rs
 package io.github.kotlinmania.ianatimezone
 
+internal actual object Platform {
+    actual fun getTimezoneInner(): Result<String> = TzLinux.getTimezoneInner()
+}
+
 internal object TzLinux {
     fun getTimezoneInner(): Result<String> =
         etcLocaltime()
@@ -8,7 +12,7 @@ internal object TzLinux {
             .recoverCatching { OpenWrt.etcConfigSystem().getOrThrow() }
 
     private fun etcTimezone(): Result<String> {
-        val contents = readSystemText("/etc/timezone").getOrElse { return Result.failure(it.toGetTimezoneError()) }
+        val contents = readSystemText("/etc/timezone").getOrElse { return Result.failure(it.toGetTimezoneError().toBridge()) }
         return Result.success(contents.trimEnd())
     }
 
@@ -33,19 +37,19 @@ internal object TzLinux {
             "/etc/zoneinfo/",
             "../etc/zoneinfo/",
         )
-        var link = readSystemLink("/etc/localtime").getOrElse { return Result.failure(it.toGetTimezoneError()) }
+        var link = readSystemLink("/etc/localtime").getOrElse { return Result.failure(it.toGetTimezoneError().toBridge()) }
         for (prefix in prefixes) {
             if (link.startsWith(prefix)) {
                 link = link.removePrefix(prefix)
                 return Result.success(link)
             }
         }
-        return Result.failure(GetTimezoneError.FailedParsingString)
+        return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
     }
 
     private object OpenWrt {
         fun etcConfigSystem(): Result<String> {
-            val lines = readSystemLines("/etc/config/system").getOrElse { return Result.failure(it.toGetTimezoneError()) }
+            val lines = readSystemLines("/etc/config/system").getOrElse { return Result.failure(it.toGetTimezoneError().toBridge()) }
             var inSystemSection = false
             var timezone: String? = null
 
@@ -71,7 +75,7 @@ internal object TzLinux {
                 }
             }
 
-            return timezone?.let { Result.success(it) } ?: Result.failure(GetTimezoneError.OsError)
+            return timezone?.let { Result.success(it) } ?: Result.failure(GetTimezoneError.OsError.toBridge())
         }
     }
 }
