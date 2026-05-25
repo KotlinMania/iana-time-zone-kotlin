@@ -10,7 +10,7 @@ internal object TzAndroid {
         return getProperties()
             ?.getFromCString(key)
             ?.let { Result.success(it) }
-            ?: Result.failure(GetTimezoneError.OsError.toBridge())
+            ?: Result.failure(GetTimezoneError.OsError)
     }
 
     private var properties: AndroidSystemProperties? = null
