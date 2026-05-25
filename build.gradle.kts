@@ -316,7 +316,7 @@ kotlin {
         }
         val appleMain by getting {
             dependencies {
-                implementation("io.github.kotlinmania:core-foundation-sys-kotlin:0.1.0")
+                implementation("io.github.kotlinmania:core-foundation-sys-kotlin:0.1.2")
             }
         }
         val mingwMain by getting {
@@ -326,7 +326,7 @@ kotlin {
         }
         val nativeMain by getting {
             dependencies {
-                implementation("io.github.kotlinmania:iana-time-zone-haiku-kotlin:0.1.0")
+                implementation("io.github.kotlinmania:iana-time-zone-haiku-kotlin:0.1.1")
             }
         }
         val wasmJsMain by getting {
