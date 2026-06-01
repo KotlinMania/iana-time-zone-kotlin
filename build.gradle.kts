@@ -292,13 +292,15 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.8.0")
                 implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0")
+                // std::fs equivalent — used by the commonMain port of
+                // tz_linux.rs (read_link → SystemFileSystem.resolve,
+                // read_to_string → Source.readString).
+                implementation("io.github.kotlinmania:km-io:0.1.5")
             }
         }
-        val commonTest by getting {
+                val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
-                implementation("io.github.kotlinmania:chrono-tz-kotlin:0.1.0")
-                implementation("io.github.kotlinmania:getrandom-kotlin:0.1.0")
             }
         }
         val androidMain by getting {
@@ -316,29 +318,7 @@ kotlin {
                 implementation("io.github.kotlinmania:core-foundation-sys-kotlin:0.1.2")
             }
         }
-        val mingwMain by getting {
-            dependencies {
-                implementation("io.github.kotlinmania:windows-core-kotlin:0.1.0")
-            }
-        }
-        val nativeMain by getting {
-            dependencies {
-                implementation("io.github.kotlinmania:iana-time-zone-haiku-kotlin:0.1.3")
-            }
-        }
-        val wasmJsMain by getting {
-            dependencies {
-                implementation("io.github.kotlinmania:js-sys-kotlin:0.1.0")
-                implementation("io.github.kotlinmania:log-kotlin:0.1.3")
-                implementation("io.github.kotlinmania:wasm-bindgen-kotlin:0.1.0")
-            }
-        }
-        val wasmJsTest by getting {
-            dependencies {
-                implementation("io.github.kotlinmania:getrandom-kotlin:0.1.0")
-                implementation("io.github.kotlinmania:wasm-bindgen-test-kotlin:0.1.0")
-            }
-        }
+
 
     }
     jvmToolchain(21)
