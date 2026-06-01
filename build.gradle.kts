@@ -298,7 +298,7 @@ kotlin {
                 implementation("io.github.kotlinmania:km-io:0.1.5")
             }
         }
-        val commonTest by getting {
+                val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
             }
@@ -318,6 +318,8 @@ kotlin {
                 implementation("io.github.kotlinmania:core-foundation-sys-kotlin:0.1.2")
             }
         }
+
+
     }
     jvmToolchain(21)
 }
