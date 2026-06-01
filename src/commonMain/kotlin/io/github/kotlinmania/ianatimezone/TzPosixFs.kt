@@ -58,12 +58,21 @@ internal object TzPosixFs {
      */
     private fun etcLocaltime(): Result<String> = try {
         val resolved = SystemFileSystem.resolve(Path("/etc/localtime")).toString()
-        for (prefix in PREFIXES) {
-            if (resolved.startsWith(prefix)) {
-                return Result.success(resolved.substring(prefix.length))
+        val zoneinfoMarker = "/zoneinfo/"
+        val index = resolved.indexOf(zoneinfoMarker)
+        if (index >= 0) {
+            Result.success(resolved.substring(index + zoneinfoMarker.length))
+        } else {
+            var matched: String? = null
+            for (prefix in PREFIXES) {
+                if (resolved.startsWith(prefix)) {
+                    matched = resolved.substring(prefix.length)
+                    break
+                }
             }
+            matched?.let { Result.success(it) }
+                ?: Result.failure(GetTimezoneError.FailedParsingString.toBridge())
         }
-        Result.failure(GetTimezoneError.FailedParsingString.toBridge())
     } catch (e: IOException) {
         Result.failure(GetTimezoneError.IoError("resolve(/etc/localtime): ${e.message ?: e}").toBridge())
     }
