@@ -24,11 +24,18 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "collectionsImmutable" }
 
+km-io = { module = "io.github.kotlinmania:km-io", version = "0.1.5" }
+android-system-properties-kotlin = { module = "io.github.kotlinmania:android-system-properties-kotlin", version = "0.1.0" }
+android-system-properties-kotlin = { module = "io.github.kotlinmania:android-system-properties-kotlin", version = "0.1.0" }
+core-foundation-sys-kotlin = { module = "io.github.kotlinmania:core-foundation-sys-kotlin", version = "0.1.2" }
 [bundles]
 iana-time-zone-commonMain = [
-  "kotlinx-coroutines-core",
-  "kotlinx-serialization-core",
-  "kotlinx-serialization-json",
-  "kotlinx-datetime",
-  "collections-immutable",
+    "kotlinx-coroutines-core",
+    "kotlinx-serialization-core",
+    "kotlinx-serialization-json",
+    "kotlinx-datetime",
+    "collections-immutable",
+    "km-io",
+    "android-system-properties-kotlin",
+    "core-foundation-sys-kotlin",
 ]
