@@ -1,13 +1,21 @@
-// port-lint: source tz_linux.rs (upstream Rust has no JVM target; this leaf
-//                                 picks the std::fs port that mirrors what
-//                                 cfg-based dispatch would select on a UNIX
-//                                 host. Windows JVM is handled by the
-//                                 mingwMain TzWindows path on the native
-//                                 side; a JVM-on-Windows port needs
-//                                 windows-kotlin with WinRT Calendar
-//                                 bindings, which isn't yet published.)
+// port-lint: source tz_linux.rs
 package io.github.kotlinmania.ianatimezone
 
+import java.time.ZoneId
+
+internal object TzJvm {
+    fun getTimezoneInner(): Result<String> = try {
+        val id = ZoneId.systemDefault().id
+        if (id.isNotBlank()) {
+            Result.success(id)
+        } else {
+            Result.failure(GetTimezoneError.OsError.toBridge())
+        }
+    } catch (e: Exception) {
+        Result.failure(GetTimezoneError.IoError(e.message ?: e.toString()).toBridge())
+    }
+}
+
 internal actual object Platform {
-    actual fun getTimezoneInner(): Result<String> = TzPosixFs.getTimezoneInner()
+    actual fun getTimezoneInner(): Result<String> = TzJvm.getTimezoneInner()
 }

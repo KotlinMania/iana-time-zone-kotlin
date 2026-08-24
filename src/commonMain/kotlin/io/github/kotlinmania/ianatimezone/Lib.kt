@@ -11,30 +11,36 @@ package io.github.kotlinmania.ianatimezone
  * describing what went wrong.
  */
 
-/** Error types — mirror of upstream Rust `enum GetTimezoneError`. */
+/** Error types. */
 sealed class GetTimezoneError {
     /** Failed to parse the platform-specific timezone string. */
     data object FailedParsingString : GetTimezoneError()
 
-    /**
-     * Wrapped I/O error.
-     *
-     * The upstream Rust crate wraps `std::io::Error` here. Kotlin
-     * Multiplatform has no single `IoError` type that exists on every
-     * configured target (`java.io.IOException` is JVM-only; POSIX errno on
-     * native; `DOMException` on JS; WASI errno on Wasm-WASI), so this
-     * stores the message string that the platform-specific actuals
-     * generate. Consumers can pattern-match on prefixes like
-     * `"open(/etc/timezone) failed:"` if they need to discriminate; the
-     * upstream Rust API does the same by reading
-     * `std::io::Error::to_string()`.
-     */
+    /** Wrapped I/O error. */
     data class IoError(val message: String) : GetTimezoneError()
 
     /** Platform-specific error from the operating system. */
     data object OsError : GetTimezoneError()
 
-    /** Stable string form for diagnostics; mirrors the Rust `Display` impl. */
+    /** Returns the underlying cause of the error, if any. */
+    fun source(): String? = when (this) {
+        FailedParsingString -> null
+        is IoError -> message
+        OsError -> null
+    }
+
+    /** Formats the error as a stable string. */
+    fun fmt(): String = displayMessage
+
+    companion object {
+        /** Creates a [GetTimezoneError] from an error message or exception. */
+        fun from(err: Throwable): GetTimezoneError = err.toGetTimezoneError()
+
+        /** Creates a [GetTimezoneError.IoError] from a string message. */
+        fun from(message: String): GetTimezoneError = IoError(message)
+    }
+
+    /** Stable string form for diagnostics. */
     val displayMessage: String
         get() = when (this) {
             FailedParsingString -> "GetTimezoneError.FailedParsingString"
@@ -43,15 +49,7 @@ sealed class GetTimezoneError {
         }
 }
 
-/**
- * Outcome of [getTimezone]. A sealed Outcome rather than `kotlin.Result<String>`
- * because the auto-generated Swift Export bridge pulls in the
- * `Throwable.getStackTrace() -> Array` bridge for any public `Result` /
- * `Throwable` surface, which then fails the workspace-wide
- * `allWarningsAsErrors=true` gate with `Unchecked cast 'Any?' to 'Array<Any?>'`
- * in the generated `KotlinStdlib.kt`. See workspace AGENTS.md §4 hazard class
- * "Stdlib" for the full background.
- */
+/** Outcome of [getTimezone]. */
 sealed class TimezoneResult {
     /** The current IANA zone name. */
     data class Ok(val name: String) : TimezoneResult()

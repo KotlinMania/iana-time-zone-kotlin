@@ -1,4 +1,4 @@
-// port-lint: tests src/lib.rs (mirrors the examples/ and lib-level smoke)
+// port-lint: tests lib.rs
 package io.github.kotlinmania.ianatimezone
 
 import kotlin.test.Test
@@ -10,24 +10,23 @@ import kotlin.test.fail
  * every host where the test runner executes. Each Kotlin Multiplatform
  * target wires its own [Platform] actual:
  *
- *  - macOS / iOS / tvOS / watchOS → CoreFoundation `CFTimeZoneCopySystem`
- *  - Linux                        → `/etc/localtime` symlink / `/etc/timezone` / OpenWRT
- *  - MinGW (Windows)              → `Windows.Globalization.Calendar.GetTimeZone`
- *  - Android (JVM)                → Bionic `persist.sys.timezone`
- *  - Android Native               → Bionic via cinterop
- *  - JVM                          → `java.util.TimeZone.getDefault().getID()`
- *  - JS / WasmJS                  → `Intl.DateTimeFormat().resolvedOptions().timeZone`
- *  - WasmWASI                     → WASI preview1 `environ_get TZ` with `Etc/UTC` fallback
+ *  - macOS / iOS / tvOS / watchOS -> CoreFoundation CFTimeZoneCopySystem
+ *  - Linux                        -> /etc/localtime symlink / /etc/timezone / OpenWRT
+ *  - MinGW (Windows)              -> Windows.Globalization.Calendar.GetTimeZone
+ *  - Android (JVM)                -> Bionic persist.sys.timezone
+ *  - Android Native               -> Bionic via cinterop
+ *  - JVM                          -> java.util.TimeZone.getDefault().id
+ *  - JS / WasmJS                  -> Intl.DateTimeFormat().resolvedOptions().timeZone
+ *  - WasmWASI                     -> WASI preview1 environGet TZ with Etc/UTC fallback
  *
  * The test asserts the call returns [TimezoneResult.Ok] with a non-blank
  * string. It does not pin a specific zone name because the host runner's
- * configured zone varies (GitHub CI runners default to UTC; a developer
- * machine in PT will report `America/Los_Angeles`).
+ * configured zone varies.
  */
 class GetTimezoneTest {
 
     @Test
-    fun getTimezoneReturnsANonBlankIanaName() {
+    fun getCurrent() {
         when (val result = getTimezone()) {
             is TimezoneResult.Ok ->
                 assertTrue(result.name.isNotBlank(), "timezone name should not be blank, got '${result.name}'")

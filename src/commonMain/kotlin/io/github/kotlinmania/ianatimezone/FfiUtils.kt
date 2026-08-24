@@ -16,13 +16,9 @@ internal object FfiUtils {
         fun tznameBuf(): ByteArray = ByteArray(MAX_LEN)
     }
 
-    /*
-     * The system property named 'persist.sys.timezone' contains the name of the
+    /**
+     * The system property named persist.sys.timezone contains the name of the
      * current timezone.
-     *
-     * The name of the current timezone is taken from the TZ environment
-     * variable, if defined. Otherwise, the system property named
-     * 'persist.sys.timezone' is checked instead.
      */
     val ANDROID_TIMEZONE_PROPERTY_NAME: ByteArray = "persist.sys.timezone\u0000".encodeToByteArray()
 

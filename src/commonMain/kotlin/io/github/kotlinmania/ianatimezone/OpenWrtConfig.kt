@@ -1,21 +1,11 @@
-// port-lint: source tz_linux.rs (openwrt module IterWords + read_word)
+// port-lint: source tz_linux.rs
 package io.github.kotlinmania.ianatimezone
-
-/**
- * Pure-Kotlin OpenWRT `/etc/config/system` lexer, hoisted out of the
- * Linux-Native source set so the JVM port of `tz_linux.rs` can reuse it
- * verbatim. Upstream Rust keeps this inside `mod openwrt { … }` because
- * Rust's path-dispatch already picked the file at compile time; in
- * Kotlin Multiplatform the same lexer needs to live in `commonMain` so
- * `linuxMain` (POSIX cinterop) and `jvmMain` (Java NIO) can share it.
- */
 
 /** Returned by [readWord] when an opening quote has no matching close. */
 internal data object BrokenQuote : Throwable()
 
 /**
- * Iterates over all words in an OpenWRT config line. Mirrors the
- * `IterWords<'a>` struct + `Iterator` impl from upstream Rust.
+ * Iterates over all words in an OpenWRT config line.
  */
 internal class IterWords(private var line: String) : Iterator<Result<String?>> {
     private var done = false
@@ -50,7 +40,7 @@ internal class IterWords(private var line: String) : Iterator<Result<String?>> {
  *
  * Returns a pair of the word and the remaining line if found, `null` if
  * the line is exhausted, or [BrokenQuote] if the line could not be
- * parsed. Faithful translation of the upstream Rust `read_word`.
+ * parsed.
  */
 internal fun readWord(source: String): Result<Pair<String, String>?> {
     val s = source.trimStart()
@@ -75,10 +65,61 @@ internal fun readWord(source: String): Result<Pair<String, String>?> {
         else -> {
             val index = s.indexOfFirst { it.isWhitespace() }
             if (index >= 0) {
-                Result.success(s.substring(0, index) to s.substring(index))
+                Result.success(s.substring(0, index) to s.substring(index + 1))
             } else {
                 Result.success(s to "")
             }
         }
     }
+}
+
+internal fun parseOpenWrtSystemConfig(contents: String): Result<String> {
+    val lines = contents.lineSequence()
+    var inSystemSection = false
+    var timezone: String? = null
+
+    for (line in lines) {
+        if (line.isEmpty()) continue
+        val iter = IterWords(line)
+        val keyword = iter.next().getOrElse {
+            return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+        } ?: continue
+
+        if (keyword == "config") {
+            val section = iter.next().getOrElse {
+                return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+            }
+            val tail = iter.next().getOrElse {
+                return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+            }
+            inSystemSection = section == "system" && tail == null
+        } else if (inSystemSection && keyword == "option") {
+            val key = iter.next().getOrElse {
+                return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+            }
+            if (key == "zonename") {
+                val zonename = iter.next().getOrElse {
+                    return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+                }
+                val tail = iter.next().getOrElse {
+                    return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+                }
+                if (zonename != null && tail == null) {
+                    return Result.success(zonename)
+                }
+            } else if (key == "timezone") {
+                val value = iter.next().getOrElse {
+                    return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+                }
+                val tail = iter.next().getOrElse {
+                    return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+                }
+                if (value != null && tail == null) {
+                    timezone = value
+                }
+            }
+        }
+    }
+
+    return timezone?.let { Result.success(it) } ?: Result.failure(GetTimezoneError.OsError.toBridge())
 }
