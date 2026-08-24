@@ -1,6 +1,6 @@
 # port-lint Proposed Changes
 
-**Generated:** 2026-05-19
+**Generated:** 2026-08-23
 **Source:** tmp/iana-time-zone/src
 **Target:** src
 
