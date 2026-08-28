@@ -4,14 +4,14 @@ Based on AST analysis, here are the concrete next steps.
 
 ## Summary
 
-- **Files Present:** 4/17 (23.5%)
-- **Function parity:** 14/144 matched (target 23) — 9.7%
-- **Class/type parity:** 3/13 matched (target 17) — 23.1%
-- **Combined symbol parity:** 17/157 matched (target 40) — 10.8%
-- **Average inline-code cosine:** 0.29 (function body across 4 matched files)
-- **Average documentation cosine:** 0.52 (doc text across 4 matched files)
-- **Cheat-zeroed Files:** 1
-- **Critical Issues:** 3 files with <0.60 function similarity
+- **Files Present:** 10/17 (58.8%)
+- **Function parity:** 129/143 matched (target 166) — 90.2%
+- **Class/type parity:** 10/13 matched (target 49) — 76.9%
+- **Combined symbol parity:** 139/156 matched (target 215) — 89.1%
+- **Average inline-code cosine:** 0.30 (function body across 10 matched files)
+- **Average documentation cosine:** 0.20 (doc text across 10 matched files)
+- **Cheat-zeroed Files:** 3
+- **Critical Issues:** 9 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
 
@@ -29,17 +29,73 @@ Every matched file is listed below with function and type symbol parity.
 
 ### 1. tz_linux
 
-- **Target:** `ianatimezone.OpenWrtConfig`
-- **Similarity:** 0.17
+- **Target:** `ianatimezone.TzJvm`
+- **Similarity:** 0.46
 - **Dependents:** 0
-- **Priority Score:** 61108.3
-- **Functions:** 3/8 matched (target 5)
-- **Missing functions:** `get_timezone_inner`, `etc_timezone`, `etc_localtime`, `etc_config_system`, `from`
-- **Types:** 2/3 matched
+- **Priority Score:** 21105.4
+- **Functions:** 7/8 matched (target 13)
+- **Missing functions:** `from`
+- **Types:** 2/3 matched (target 6)
 - **Missing types:** `Item`
 - **Tests:** 1/1 matched
 
-### 2. platform
+### 2. windows_bindings
+
+- **Target:** `ianatimezone.WindowsBindings`
+- **Similarity:** 0.50
+- **Dependents:** 0
+- **Priority Score:** 20705.0
+- **Functions:** 101/101 matched (target 110)
+- **Missing functions:** _none_
+- **Types:** 5/6 matched (target 17)
+- **Missing types:** `Vtable`
+
+### 3. tz_darwin
+
+- **Target:** `ianatimezone.TzDarwin`
+- **Similarity:** 0.58
+- **Dependents:** 0
+- **Priority Score:** 10904.2
+- **Functions:** 6/7 matched (target 9)
+- **Missing functions:** `drop`
+- **Types:** 2/2 matched (target 4)
+- **Missing types:** _none_
+
+### 4. tz_wasm32_unknown
+
+- **Target:** `ianatimezone.TzWasm32Unknown [ZERO]`
+- **Similarity:** 0.00
+- **Dependents:** 0
+- **Priority Score:** 10210.0
+- **Functions:** 1/2 matched (target 6)
+- **Missing functions:** `pass`
+- **Types:** 0/0 matched (target 2)
+- **Missing types:** _none_
+- **Tests:** 0/1 matched
+
+### 5. tz_android
+
+- **Target:** `ianatimezone.TzAndroid`
+- **Similarity:** 0.17
+- **Dependents:** 0
+- **Priority Score:** 10208.3
+- **Functions:** 1/2 matched (target 4)
+- **Missing functions:** `get_properties`
+- **Types:** 0/0 matched (target 2)
+- **Missing types:** _none_
+
+### 6. tz_windows
+
+- **Target:** `ianatimezone.TzWindows`
+- **Similarity:** 0.32
+- **Dependents:** 0
+- **Priority Score:** 10206.8
+- **Functions:** 1/2 matched
+- **Missing functions:** `from`
+- **Types:** 0/0 matched (target 2)
+- **Missing types:** _none_
+
+### 7. platform
 
 - **Target:** `ianatimezone.Platform [ZERO]`
 - **Similarity:** 0.00
@@ -50,7 +106,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
 
-### 3. lib
+### 8. lib
 
 - **Target:** `ianatimezone.Lib`
 - **Similarity:** 0.35
@@ -62,7 +118,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing types:** _none_
 - **Tests:** 1/1 matched
 
-### 4. ffi_utils
+### 9. ffi_utils
 
 - **Target:** `ianatimezone.FfiUtils`
 - **Similarity:** 0.65
@@ -73,6 +129,17 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched (target 4)
 - **Missing types:** _none_
 - **Tests:** 4/4 matched
+
+### 10. tz_wasm32_wasi
+
+- **Target:** `ianatimezone.TzWasm32Wasi [ZERO]`
+- **Similarity:** 0.00
+- **Dependents:** 0
+- **Priority Score:** 110.0
+- **Functions:** 1/1 matched (target 4)
+- **Missing functions:** _none_
+- **Types:** 0/0 matched (target 2)
+- **Missing types:** _none_
 
 ## Success Criteria
 
