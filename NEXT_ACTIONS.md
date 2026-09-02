@@ -4,14 +4,14 @@ Based on AST analysis, here are the concrete next steps.
 
 ## Summary
 
-- **Files Present:** 10/17 (58.8%)
-- **Function parity:** 129/143 matched (target 166) — 90.2%
-- **Class/type parity:** 10/13 matched (target 49) — 76.9%
-- **Combined symbol parity:** 139/156 matched (target 215) — 89.1%
-- **Average inline-code cosine:** 0.30 (function body across 10 matched files)
-- **Average documentation cosine:** 0.20 (doc text across 10 matched files)
-- **Cheat-zeroed Files:** 3
-- **Critical Issues:** 9 files with <0.60 function similarity
+- **Files Present:** 17/17 (100.0%)
+- **Function parity:** 138/143 matched (target 177) — 96.5%
+- **Class/type parity:** 11/13 matched (target 57) — 84.6%
+- **Combined symbol parity:** 149/156 matched (target 234) — 95.5%
+- **Average inline-code cosine:** 0.42 (function body across 17 matched files)
+- **Average documentation cosine:** 0.14 (doc text across 17 matched files)
+- **Cheat-zeroed Files:** 0
+- **Critical Issues:** 14 files with <0.60 function similarity
 
 ## Priority 1: Fix Incomplete High-Dependency Files
 
@@ -61,19 +61,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 2/2 matched (target 4)
 - **Missing types:** _none_
 
-### 4. tz_wasm32_unknown
-
-- **Target:** `ianatimezone.TzWasm32Unknown [ZERO]`
-- **Similarity:** 0.00
-- **Dependents:** 0
-- **Priority Score:** 10210.0
-- **Functions:** 1/2 matched (target 6)
-- **Missing functions:** `pass`
-- **Types:** 0/0 matched (target 2)
-- **Missing types:** _none_
-- **Tests:** 0/1 matched
-
-### 5. tz_android
+### 4. tz_android
 
 - **Target:** `ianatimezone.TzAndroid`
 - **Similarity:** 0.17
@@ -83,6 +71,18 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing functions:** `get_properties`
 - **Types:** 0/0 matched (target 2)
 - **Missing types:** _none_
+
+### 5. tz_wasm32_unknown
+
+- **Target:** `ianatimezone.TzWasm32Unknown`
+- **Similarity:** 0.25
+- **Dependents:** 0
+- **Priority Score:** 10207.5
+- **Functions:** 1/2 matched (target 6)
+- **Missing functions:** `pass`
+- **Types:** 0/0 matched (target 2)
+- **Missing types:** _none_
+- **Tests:** 0/1 matched
 
 ### 6. tz_windows
 
@@ -95,18 +95,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Types:** 0/0 matched (target 2)
 - **Missing types:** _none_
 
-### 7. platform
-
-- **Target:** `ianatimezone.Platform [ZERO]`
-- **Similarity:** 0.00
-- **Dependents:** 0
-- **Priority Score:** 10110.0
-- **Functions:** 0/1 matched (target 0)
-- **Missing functions:** `get_timezone_inner`
-- **Types:** 0/0 matched (target 1)
-- **Missing types:** _none_
-
-### 8. lib
+### 7. lib
 
 - **Target:** `ianatimezone.Lib`
 - **Similarity:** 0.35
@@ -118,7 +107,7 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing types:** _none_
 - **Tests:** 1/1 matched
 
-### 9. ffi_utils
+### 8. ffi_utils
 
 - **Target:** `ianatimezone.FfiUtils`
 - **Similarity:** 0.65
@@ -130,15 +119,103 @@ Every matched file is listed below with function and type symbol parity.
 - **Missing types:** _none_
 - **Tests:** 4/4 matched
 
+### 9. tz_ohos
+
+- **Target:** `ianatimezone.TzOhos`
+- **Similarity:** 0.73
+- **Dependents:** 0
+- **Priority Score:** 302.7
+- **Functions:** 2/2 matched
+- **Missing functions:** _none_
+- **Types:** 1/1 matched (target 2)
+- **Missing types:** _none_
+
 ### 10. tz_wasm32_wasi
 
-- **Target:** `ianatimezone.TzWasm32Wasi [ZERO]`
-- **Similarity:** 0.00
+- **Target:** `ianatimezone.TzWasm32Wasi`
+- **Similarity:** 0.25
 - **Dependents:** 0
-- **Priority Score:** 110.0
+- **Priority Score:** 107.5
 - **Functions:** 1/1 matched (target 4)
 - **Missing functions:** _none_
 - **Types:** 0/0 matched (target 2)
+- **Missing types:** _none_
+
+### 11. tz_illumos
+
+- **Target:** `ianatimezone.TzIllumos`
+- **Similarity:** 0.27
+- **Dependents:** 0
+- **Priority Score:** 107.3
+- **Functions:** 1/1 matched (target 2)
+- **Missing functions:** _none_
+- **Types:** 0/0 matched (target 1)
+- **Missing types:** _none_
+
+### 12. platform
+
+- **Target:** `ianatimezone.Platform`
+- **Similarity:** 0.29
+- **Dependents:** 0
+- **Priority Score:** 107.1
+- **Functions:** 1/1 matched
+- **Missing functions:** _none_
+- **Types:** 0/0 matched (target 1)
+- **Missing types:** _none_
+
+### 13. tz_wasm32_emscripten
+
+- **Target:** `ianatimezone.TzWasm32Emscripten`
+- **Similarity:** 0.42
+- **Dependents:** 0
+- **Priority Score:** 105.8
+- **Functions:** 1/1 matched
+- **Missing functions:** _none_
+- **Types:** 0/0 matched (target 1)
+- **Missing types:** _none_
+
+### 14. tz_netbsd
+
+- **Target:** `ianatimezone.TzNetbsd`
+- **Similarity:** 0.43
+- **Dependents:** 0
+- **Priority Score:** 105.7
+- **Functions:** 1/1 matched (target 2)
+- **Missing functions:** _none_
+- **Types:** 0/0 matched (target 1)
+- **Missing types:** _none_
+
+### 15. tz_haiku
+
+- **Target:** `ianatimezone.TzHaiku`
+- **Similarity:** 0.43
+- **Dependents:** 0
+- **Priority Score:** 105.7
+- **Functions:** 1/1 matched
+- **Missing functions:** _none_
+- **Types:** 0/0 matched (target 1)
+- **Missing types:** _none_
+
+### 16. tz_aix
+
+- **Target:** `ianatimezone.TzAix`
+- **Similarity:** 0.43
+- **Dependents:** 0
+- **Priority Score:** 105.7
+- **Functions:** 1/1 matched
+- **Missing functions:** _none_
+- **Types:** 0/0 matched (target 1)
+- **Missing types:** _none_
+
+### 17. tz_freebsd
+
+- **Target:** `ianatimezone.TzFreebsd`
+- **Similarity:** 0.62
+- **Dependents:** 0
+- **Priority Score:** 103.8
+- **Functions:** 1/1 matched
+- **Missing functions:** _none_
+- **Types:** 0/0 matched (target 1)
 - **Missing types:** _none_
 
 ## Success Criteria

@@ -14,14 +14,13 @@ internal actual object Platform {
 internal object TzWasm32Wasi {
     /**
      * Reads `TZ` from the WASI environment, falling back to `Etc/UTC` when it
-     * is unset — matching the upstream Rust
-     * `std::env::var("TZ").or_else(|_| Ok("Etc/UTC".to_owned()))`.
+     * is unset.
      */
     fun getTimezoneInner(): Result<String> =
         Result.success(wasiEnvironmentVariable("TZ") ?: "Etc/UTC")
 }
 
-// ----- WASI preview1 `environ_sizes_get` + `environ_get` ABI --------------
+// ----- WASI preview1 environment ABI --------------
 
 @WasmImport("wasi_snapshot_preview1", "environ_sizes_get")
 private external fun wasiEnvironSizesGet(outCount: Int, outBufSize: Int): Int
@@ -33,9 +32,9 @@ private external fun wasiEnvironGet(environPtr: Int, environBufPtr: Int): Int
  * Decodes the WASI environment table and returns the value associated with
  * [name], or `null` if the variable is unset.
  *
- * The two-call shape (`environ_sizes_get` then `environ_get`) is mandated by
+ * The two-call shape (sizes get followed by environ get) is mandated by
  * the WASI preview1 ABI: the first call reports the count of entries and the
- * total byte size of the packed `KEY=VALUE\0` buffer, the second writes the
+ * total byte size of the packed key-value buffer, the second writes the
  * pointer table and the buffer into linear memory at addresses the caller
  * allocated.
  */
