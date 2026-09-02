@@ -13,14 +13,10 @@ internal object TzWasm32Unknown {
 }
 
 /**
- * Returns the `timeZone` field of `Intl.DateTimeFormat().resolvedOptions()`.
+ * Returns the timezone property of Intl.DateTimeFormat resolved options.
  *
- * Mirror of upstream Rust's
- * `js_sys::Intl::DateTimeFormat::new(&Array::new(), &Object::new())
- *      .resolved_options()` + `Reflect::get(&intl, "timeZone")`. The Kotlin/JS
- * compiler inlines this into a single property read against the standard
- * ECMA-402 Intl namespace, which is present in every modern browser and in
- * Node.js >=14.
+ * Interops directly with the standard ECMA-402 Intl namespace, which is
+ * present in every modern browser and in Node.js >=14.
  */
 private fun jsIntlDateTimeFormatTimeZone(): String? =
     js("(new Intl.DateTimeFormat()).resolvedOptions().timeZone") as String?
