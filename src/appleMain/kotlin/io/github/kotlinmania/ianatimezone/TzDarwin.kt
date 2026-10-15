@@ -1,21 +1,19 @@
 // port-lint: source tz_darwin.rs
 package io.github.kotlinmania.ianatimezone
 
+import io.github.kotlinmania.corefoundationsys.CFStringRef
+import io.github.kotlinmania.corefoundationsys.CFTimeZoneRef
+import io.github.kotlinmania.corefoundationsys.base.CFRange
+import io.github.kotlinmania.corefoundationsys.cfRelease
+import io.github.kotlinmania.corefoundationsys.cfStringGetBytes
+import io.github.kotlinmania.corefoundationsys.cfStringGetCStringPtr
+import io.github.kotlinmania.corefoundationsys.cfStringGetLength
+import io.github.kotlinmania.corefoundationsys.cfTimeZoneCopySystem
+import io.github.kotlinmania.corefoundationsys.cfTimeZoneGetName
+import io.github.kotlinmania.corefoundationsys.cfTimeZoneResetSystem
+import io.github.kotlinmania.corefoundationsys.string.kCFStringEncodingUTF8
 import io.github.kotlinmania.ianatimezone.FfiUtils.Buffer.MAX_LEN
 import io.github.kotlinmania.ianatimezone.FfiUtils.Buffer.tznameBuf
-import kotlinx.cinterop.BetaInteropApi
-import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.cinterop.interpretObjCPointer
-import kotlinx.cinterop.rawValue
-import kotlinx.cinterop.toKString
-import platform.CoreFoundation.CFRelease
-import platform.CoreFoundation.CFStringGetCStringPtr
-import platform.CoreFoundation.CFStringRef
-import platform.CoreFoundation.CFTimeZoneCopySystem
-import platform.CoreFoundation.CFTimeZoneGetName
-import platform.CoreFoundation.CFTimeZoneRef
-import platform.CoreFoundation.CFTimeZoneResetSystem
-import platform.CoreFoundation.kCFStringEncodingUTF8
 
 internal object TzDarwin {
     fun getTimezoneInner(): Result<String> =
@@ -38,10 +36,11 @@ internal object TzDarwin {
     }
 }
 
-@OptIn(ExperimentalForeignApi::class)
-internal class SystemTimeZone private constructor(private val ref: CFTimeZoneRef) {
+internal class SystemTimeZone private constructor(
+    private val ref: CFTimeZoneRef,
+) {
     fun release() {
-        CFRelease(ref)
+        cfRelease(ref)
     }
 
     /**
@@ -59,32 +58,42 @@ internal class SystemTimeZone private constructor(private val ref: CFTimeZoneRef
      * current system timezone.
      */
     fun name(): StringRef<SystemTimeZone>? {
-        val string = CFTimeZoneGetName(ref) ?: return null
+        val string = cfTimeZoneGetName(ref) ?: return null
         return StringRef.new(string, this)
     }
 
     companion object {
         fun new(): SystemTimeZone? {
-            CFTimeZoneResetSystem()
-            val value = CFTimeZoneCopySystem() ?: return null
+            cfTimeZoneResetSystem()
+            val value = cfTimeZoneCopySystem() ?: return null
             return SystemTimeZone(value)
         }
     }
 }
 
-@OptIn(ExperimentalForeignApi::class, BetaInteropApi::class)
 internal class StringRef<T> private constructor(
     private val string: CFStringRef,
     private val parent: T,
 ) {
-    fun asUtf8(): String? {
-        val ptr = CFStringGetCStringPtr(string, kCFStringEncodingUTF8) ?: return null
-        return ptr.toKString()
-    }
+    fun asUtf8(): String? = cfStringGetCStringPtr(string, kCFStringEncodingUTF8)
 
     fun toUtf8(buf: ByteArray): String? {
-        val nsStr = interpretObjCPointer<platform.Foundation.NSString>(string.rawValue)
-        return nsStr.toString()
+        val length = cfStringGetLength(string)
+        val range = CFRange(location = 0, length = length)
+        val convertedBytes =
+            cfStringGetBytes(
+                string,
+                range,
+                kCFStringEncodingUTF8,
+                0u,
+                false,
+                buf,
+                buf.size,
+            )
+        if (convertedBytes != length) {
+            return null
+        }
+        return buf.decodeToString(endIndex = convertedBytes)
     }
 
     companion object {

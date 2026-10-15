@@ -6,8 +6,9 @@ internal object TzIllumos {
     // https://docs.oracle.com/cd/E23824_01/html/821-1473/uc-timezone-4.html
 
     fun getTimezoneInner(fileReader: (String) -> String? = { null }): Result<String> {
-        val contents = fileReader("/etc/default/init")
-            ?: return Result.failure(GetTimezoneError.OsError.toBridge())
+        val contents =
+            fileReader("/etc/default/init")
+                ?: return Result.failure(GetTimezoneError.OsError.toBridge())
         return parseInitConfig(contents)
     }
 
