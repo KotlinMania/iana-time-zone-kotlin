@@ -22,6 +22,7 @@ internal object TzWasm32Unknown {
  * valid JavaScript at statement position. The runtime semantics are
  * identical to the jsMain sibling.
  */
-private fun jsIntlDateTimeFormatTimeZone(): String? = js(
-    "{ return (new Intl.DateTimeFormat()).resolvedOptions().timeZone; }",
-)
+private fun jsIntlDateTimeFormatTimeZone(): String? =
+    js(
+        "{ return (new Intl.DateTimeFormat()).resolvedOptions().timeZone; }",
+    )

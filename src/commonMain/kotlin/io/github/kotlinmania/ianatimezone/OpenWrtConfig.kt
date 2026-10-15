@@ -7,12 +7,14 @@ internal data object BrokenQuote : Throwable()
 /**
  * Iterates over all words in an OpenWRT config line.
  */
-internal class IterWords(private var line: String) : Iterator<Result<String?>> {
+internal class IterWords(
+    private var line: String,
+) {
     private var done = false
 
-    override fun hasNext(): Boolean = !done
+    fun hasNext(): Boolean = !done
 
-    override fun next(): Result<String?> {
+    fun next(): Result<String?> {
         val result = readWord(line)
         return result.fold(
             onSuccess = { item ->
@@ -45,7 +47,10 @@ internal class IterWords(private var line: String) : Iterator<Result<String?>> {
 internal fun readWord(source: String): Result<Pair<String, String>?> {
     val s = source.trimStart()
     return when {
-        s.isEmpty() || s.startsWith('#') -> Result.success(null)
+        s.isEmpty() || s.startsWith('#') -> {
+            Result.success(null)
+        }
+
         s.startsWith('\'') -> {
             val index = s.indexOf('\'', startIndex = 1)
             if (index >= 0) {
@@ -54,6 +59,7 @@ internal fun readWord(source: String): Result<Pair<String, String>?> {
                 Result.failure(BrokenQuote)
             }
         }
+
         s.startsWith('"') -> {
             val index = s.indexOf('"', startIndex = 1)
             if (index >= 0) {
@@ -62,6 +68,7 @@ internal fun readWord(source: String): Result<Pair<String, String>?> {
                 Result.failure(BrokenQuote)
             }
         }
+
         else -> {
             val index = s.indexOfFirst { it.isWhitespace() }
             if (index >= 0) {
@@ -81,39 +88,47 @@ internal fun parseOpenWrtSystemConfig(contents: String): Result<String> {
     for (line in lines) {
         if (line.isEmpty()) continue
         val iter = IterWords(line)
-        val keyword = iter.next().getOrElse {
-            return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
-        } ?: continue
+        val keyword =
+            iter.next().getOrElse {
+                return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+            } ?: continue
 
         if (keyword == "config") {
-            val section = iter.next().getOrElse {
-                return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
-            }
-            val tail = iter.next().getOrElse {
-                return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
-            }
+            val section =
+                iter.next().getOrElse {
+                    return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+                }
+            val tail =
+                iter.next().getOrElse {
+                    return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+                }
             inSystemSection = section == "system" && tail == null
         } else if (inSystemSection && keyword == "option") {
-            val key = iter.next().getOrElse {
-                return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
-            }
+            val key =
+                iter.next().getOrElse {
+                    return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+                }
             if (key == "zonename") {
-                val zonename = iter.next().getOrElse {
-                    return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
-                }
-                val tail = iter.next().getOrElse {
-                    return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
-                }
+                val zonename =
+                    iter.next().getOrElse {
+                        return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+                    }
+                val tail =
+                    iter.next().getOrElse {
+                        return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+                    }
                 if (zonename != null && tail == null) {
                     return Result.success(zonename)
                 }
             } else if (key == "timezone") {
-                val value = iter.next().getOrElse {
-                    return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
-                }
-                val tail = iter.next().getOrElse {
-                    return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
-                }
+                val value =
+                    iter.next().getOrElse {
+                        return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+                    }
+                val tail =
+                    iter.next().getOrElse {
+                        return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+                    }
                 if (value != null && tail == null) {
                     timezone = value
                 }

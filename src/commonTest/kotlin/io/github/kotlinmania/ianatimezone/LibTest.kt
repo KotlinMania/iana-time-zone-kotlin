@@ -24,14 +24,16 @@ import kotlin.test.fail
  * configured zone varies.
  */
 class GetTimezoneTest {
-
     @Test
     fun getCurrent() {
         when (val result = getTimezone()) {
-            is TimezoneResult.Ok ->
+            is TimezoneResult.Ok -> {
                 assertTrue(result.name.isNotBlank(), "timezone name should not be blank, got '${result.name}'")
-            is TimezoneResult.Failure ->
+            }
+
+            is TimezoneResult.Failure -> {
                 fail("getTimezone() should succeed on host runtimes; got ${result.error.displayMessage}")
+            }
         }
     }
 

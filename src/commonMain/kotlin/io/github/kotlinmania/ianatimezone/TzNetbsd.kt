@@ -7,14 +7,16 @@ internal object TzNetbsd {
     // This is a backport of the Linux implementation.
     // NetBSDs is less than thorough how the softlink should be set up.
 
-    private val PREFIXES = listOf(
-        "/usr/share/zoneinfo/", // absolute path
-        "../usr/share/zoneinfo/", // relative path
-    )
+    private val PREFIXES =
+        listOf(
+            "/usr/share/zoneinfo/", // absolute path
+            "../usr/share/zoneinfo/", // relative path
+        )
 
     fun getTimezoneInner(linkReader: (String) -> String? = { null }): Result<String> {
-        val s = linkReader("/etc/localtime")
-            ?: return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
+        val s =
+            linkReader("/etc/localtime")
+                ?: return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
         return parseLocaltimeLink(s)
     }
 

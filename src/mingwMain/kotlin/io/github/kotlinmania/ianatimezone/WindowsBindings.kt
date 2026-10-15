@@ -5,11 +5,17 @@ package io.github.kotlinmania.ianatimezone
 object WindowsBindings {
     object Windows {
         object Globalization {
-            class Calendar(private val unknown: WindowsCore.IUnknown) {
+            class Calendar(
+                private val unknown: WindowsCore.IUnknown,
+            ) {
                 fun clone(): Result<Calendar> = WindowsCore.invokeCalendar(this, "Clone")
+
                 fun setToMin(): Result<Unit> = WindowsCore.invokeUnit(this, "SetToMin")
+
                 fun setToMax(): Result<Unit> = WindowsCore.invokeUnit(this, "SetToMax")
+
                 fun numeralSystem(): Result<WindowsCore.HString> = WindowsCore.invokeHString(this, "NumeralSystem")
+
                 fun setNumeralSystem(value: WindowsCore.HString): Result<Unit> =
                     WindowsCore.invokeUnit(this, "SetNumeralSystem", value)
 
@@ -20,16 +26,24 @@ object WindowsBindings {
                     WindowsCore.invokeUnit(this, "ChangeCalendarSystem", value)
 
                 fun getClock(): Result<WindowsCore.HString> = WindowsCore.invokeHString(this, "GetClock")
+
                 fun changeClock(value: WindowsCore.HString): Result<Unit> =
                     WindowsCore.invokeUnit(this, "ChangeClock", value)
 
                 fun setToNow(): Result<Unit> = WindowsCore.invokeUnit(this, "SetToNow")
+
                 fun firstEra(): Result<Int> = WindowsCore.invokeInt(this, "FirstEra")
+
                 fun lastEra(): Result<Int> = WindowsCore.invokeInt(this, "LastEra")
+
                 fun numberOfEras(): Result<Int> = WindowsCore.invokeInt(this, "NumberOfEras")
+
                 fun era(): Result<Int> = WindowsCore.invokeInt(this, "Era")
+
                 fun setEra(value: Int): Result<Unit> = WindowsCore.invokeUnit(this, "SetEra", value)
+
                 fun addEras(eras: Int): Result<Unit> = WindowsCore.invokeUnit(this, "AddEras", eras)
+
                 fun eraAsFullString(): Result<WindowsCore.HString> =
                     WindowsCore.invokeHString(this, "EraAsFullString")
 
@@ -37,12 +51,19 @@ object WindowsBindings {
                     WindowsCore.invokeHString(this, "EraAsString", idealLength)
 
                 fun firstYearInThisEra(): Result<Int> = WindowsCore.invokeInt(this, "FirstYearInThisEra")
+
                 fun lastYearInThisEra(): Result<Int> = WindowsCore.invokeInt(this, "LastYearInThisEra")
+
                 fun numberOfYearsInThisEra(): Result<Int> = WindowsCore.invokeInt(this, "NumberOfYearsInThisEra")
+
                 fun year(): Result<Int> = WindowsCore.invokeInt(this, "Year")
+
                 fun setYear(value: Int): Result<Unit> = WindowsCore.invokeUnit(this, "SetYear", value)
+
                 fun addYears(years: Int): Result<Unit> = WindowsCore.invokeUnit(this, "AddYears", years)
+
                 fun yearAsString(): Result<WindowsCore.HString> = WindowsCore.invokeHString(this, "YearAsString")
+
                 fun yearAsTruncatedString(remainingDigits: Int): Result<WindowsCore.HString> =
                     WindowsCore.invokeHString(this, "YearAsTruncatedString", remainingDigits)
 
@@ -50,11 +71,17 @@ object WindowsBindings {
                     WindowsCore.invokeHString(this, "YearAsPaddedString", minDigits)
 
                 fun firstMonthInThisYear(): Result<Int> = WindowsCore.invokeInt(this, "FirstMonthInThisYear")
+
                 fun lastMonthInThisYear(): Result<Int> = WindowsCore.invokeInt(this, "LastMonthInThisYear")
+
                 fun numberOfMonthsInThisYear(): Result<Int> = WindowsCore.invokeInt(this, "NumberOfMonthsInThisYear")
+
                 fun month(): Result<Int> = WindowsCore.invokeInt(this, "Month")
+
                 fun setMonth(value: Int): Result<Unit> = WindowsCore.invokeUnit(this, "SetMonth", value)
+
                 fun addMonths(months: Int): Result<Unit> = WindowsCore.invokeUnit(this, "AddMonths", months)
+
                 fun monthAsFullString(): Result<WindowsCore.HString> =
                     WindowsCore.invokeHString(this, "MonthAsFullString")
 
@@ -74,13 +101,21 @@ object WindowsBindings {
                     WindowsCore.invokeHString(this, "MonthAsPaddedNumericString", minDigits)
 
                 fun addWeeks(weeks: Int): Result<Unit> = WindowsCore.invokeUnit(this, "AddWeeks", weeks)
+
                 fun firstDayInThisMonth(): Result<Int> = WindowsCore.invokeInt(this, "FirstDayInThisMonth")
+
                 fun lastDayInThisMonth(): Result<Int> = WindowsCore.invokeInt(this, "LastDayInThisMonth")
+
                 fun numberOfDaysInThisMonth(): Result<Int> = WindowsCore.invokeInt(this, "NumberOfDaysInThisMonth")
+
                 fun day(): Result<Int> = WindowsCore.invokeInt(this, "Day")
+
                 fun setDay(value: Int): Result<Unit> = WindowsCore.invokeUnit(this, "SetDay", value)
+
                 fun addDays(days: Int): Result<Unit> = WindowsCore.invokeUnit(this, "AddDays", days)
+
                 fun dayAsString(): Result<WindowsCore.HString> = WindowsCore.invokeHString(this, "DayAsString")
+
                 fun dayAsPaddedString(minDigits: Int): Result<WindowsCore.HString> =
                     WindowsCore.invokeHString(this, "DayAsPaddedString", minDigits)
 
@@ -97,11 +132,17 @@ object WindowsBindings {
                     WindowsCore.invokeHString(this, "DayOfWeekAsSoloString", idealLength)
 
                 fun firstPeriodInThisDay(): Result<Int> = WindowsCore.invokeInt(this, "FirstPeriodInThisDay")
+
                 fun lastPeriodInThisDay(): Result<Int> = WindowsCore.invokeInt(this, "LastPeriodInThisDay")
+
                 fun numberOfPeriodsInThisDay(): Result<Int> = WindowsCore.invokeInt(this, "NumberOfPeriodsInThisDay")
+
                 fun period(): Result<Int> = WindowsCore.invokeInt(this, "Period")
+
                 fun setPeriod(value: Int): Result<Unit> = WindowsCore.invokeUnit(this, "SetPeriod", value)
+
                 fun addPeriods(periods: Int): Result<Unit> = WindowsCore.invokeUnit(this, "AddPeriods", periods)
+
                 fun periodAsFullString(): Result<WindowsCore.HString> =
                     WindowsCore.invokeHString(this, "PeriodAsFullString")
 
@@ -109,18 +150,28 @@ object WindowsBindings {
                     WindowsCore.invokeHString(this, "PeriodAsString", idealLength)
 
                 fun firstHourInThisPeriod(): Result<Int> = WindowsCore.invokeInt(this, "FirstHourInThisPeriod")
+
                 fun lastHourInThisPeriod(): Result<Int> = WindowsCore.invokeInt(this, "LastHourInThisPeriod")
+
                 fun numberOfHoursInThisPeriod(): Result<Int> = WindowsCore.invokeInt(this, "NumberOfHoursInThisPeriod")
+
                 fun hour(): Result<Int> = WindowsCore.invokeInt(this, "Hour")
+
                 fun setHour(value: Int): Result<Unit> = WindowsCore.invokeUnit(this, "SetHour", value)
+
                 fun addHours(hours: Int): Result<Unit> = WindowsCore.invokeUnit(this, "AddHours", hours)
+
                 fun hourAsString(): Result<WindowsCore.HString> = WindowsCore.invokeHString(this, "HourAsString")
+
                 fun hourAsPaddedString(minDigits: Int): Result<WindowsCore.HString> =
                     WindowsCore.invokeHString(this, "HourAsPaddedString", minDigits)
 
                 fun minute(): Result<Int> = WindowsCore.invokeInt(this, "Minute")
+
                 fun setMinute(value: Int): Result<Unit> = WindowsCore.invokeUnit(this, "SetMinute", value)
+
                 fun addMinutes(minutes: Int): Result<Unit> = WindowsCore.invokeUnit(this, "AddMinutes", minutes)
+
                 fun minuteAsString(): Result<WindowsCore.HString> =
                     WindowsCore.invokeHString(this, "MinuteAsString")
 
@@ -128,8 +179,11 @@ object WindowsBindings {
                     WindowsCore.invokeHString(this, "MinuteAsPaddedString", minDigits)
 
                 fun second(): Result<Int> = WindowsCore.invokeInt(this, "Second")
+
                 fun setSecond(value: Int): Result<Unit> = WindowsCore.invokeUnit(this, "SetSecond", value)
+
                 fun addSeconds(seconds: Int): Result<Unit> = WindowsCore.invokeUnit(this, "AddSeconds", seconds)
+
                 fun secondAsString(): Result<WindowsCore.HString> =
                     WindowsCore.invokeHString(this, "SecondAsString")
 
@@ -137,7 +191,9 @@ object WindowsBindings {
                     WindowsCore.invokeHString(this, "SecondAsPaddedString", minDigits)
 
                 fun nanosecond(): Result<Int> = WindowsCore.invokeInt(this, "Nanosecond")
+
                 fun setNanosecond(value: Int): Result<Unit> = WindowsCore.invokeUnit(this, "SetNanosecond", value)
+
                 fun addNanoseconds(nanoseconds: Int): Result<Unit> =
                     WindowsCore.invokeUnit(this, "AddNanoseconds", nanoseconds)
 
@@ -148,18 +204,28 @@ object WindowsBindings {
                     WindowsCore.invokeHString(this, "NanosecondAsPaddedString", minDigits)
 
                 fun compare(other: Calendar): Result<Int> = WindowsCore.invokeInt(this, "Compare", other)
+
                 fun copyTo(other: Calendar): Result<Unit> = WindowsCore.invokeUnit(this, "CopyTo", other)
+
                 fun firstMinuteInThisHour(): Result<Int> = WindowsCore.invokeInt(this, "FirstMinuteInThisHour")
+
                 fun lastMinuteInThisHour(): Result<Int> = WindowsCore.invokeInt(this, "LastMinuteInThisHour")
+
                 fun numberOfMinutesInThisHour(): Result<Int> = WindowsCore.invokeInt(this, "NumberOfMinutesInThisHour")
+
                 fun firstSecondInThisMinute(): Result<Int> = WindowsCore.invokeInt(this, "FirstSecondInThisMinute")
+
                 fun lastSecondInThisMinute(): Result<Int> = WindowsCore.invokeInt(this, "LastSecondInThisMinute")
+
                 fun numberOfSecondsInThisMinute(): Result<Int> = WindowsCore.invokeInt(this, "NumberOfSecondsInThisMinute")
+
                 fun resolvedLanguage(): Result<WindowsCore.HString> =
                     WindowsCore.invokeHString(this, "ResolvedLanguage")
 
                 fun isDaylightSavingTime(): Result<Boolean> = WindowsCore.invokeBoolean(this, "IsDaylightSavingTime")
+
                 fun getTimeZone(): Result<WindowsCore.HString> = WindowsCore.invokeHString(this, "GetTimeZone")
+
                 fun changeTimeZone(timezoneId: WindowsCore.HString): Result<Unit> =
                     WindowsCore.invokeUnit(this, "ChangeTimeZone", timezoneId)
 
@@ -171,7 +237,8 @@ object WindowsBindings {
 
                 companion object {
                     fun new(): Result<Calendar> =
-                        WindowsCore.activationFactory("Windows.Globalization.Calendar")
+                        WindowsCore
+                            .activationFactory("Windows.Globalization.Calendar")
                             .map { Calendar(it.activateInstance()) }
 
                     private fun iActivationFactory(callback: (WindowsCore.GenericFactory) -> Result<Any?>): Result<Any?> =
@@ -186,8 +253,11 @@ object WindowsBindings {
             }
 
             object ICalendar
+
             object ICalendarFactory
+
             object ICalendarFactory2
+
             object ITimeZoneOnCalendar
 
             data class ICalendarVtbl(
@@ -307,23 +377,33 @@ object WindowsBindings {
 
 object WindowsCore {
     open class IUnknown
+
     class IInspectable : IUnknown()
-    data class HString(private val value: String) {
+
+    data class HString(
+        private val value: String,
+    ) {
         override fun toString(): String = value
     }
 
-    data class GenericFactory(private val runtimeName: String) {
+    data class GenericFactory(
+        private val runtimeName: String,
+    ) {
         fun activateInstance(): IUnknown = IUnknown()
     }
 
     fun activationFactory(runtimeName: String): Result<GenericFactory> = Result.success(GenericFactory(runtimeName))
+
     fun genericFactory(runtimeName: String): GenericFactory = GenericFactory(runtimeName)
 
     fun invokeCalendar(target: Any, name: String): Result<WindowsBindings.Windows.Globalization.Calendar> =
         Result.success(WindowsBindings.Windows.Globalization.Calendar(IUnknown()))
 
     fun invokeUnit(target: Any, name: String, vararg args: Any?): Result<Unit> = Result.success(Unit)
+
     fun invokeInt(target: Any, name: String, vararg args: Any?): Result<Int> = Result.success(0)
+
     fun invokeBoolean(target: Any, name: String, vararg args: Any?): Result<Boolean> = Result.success(false)
+
     fun invokeHString(target: Any, name: String, vararg args: Any?): Result<HString> = Result.success(HString(""))
 }

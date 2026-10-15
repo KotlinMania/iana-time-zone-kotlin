@@ -1,28 +1,32 @@
 // port-lint: source tz_android.rs
 package io.github.kotlinmania.ianatimezone
 
-import java.util.TimeZone
+import io.github.kotlinmania.androidsystemproperties.AndroidSystemProperties
+import io.github.kotlinmania.ianatimezone.FfiUtils.androidTimezonePropertyName
+import java.util.TimeZone as JavaTimeZone
 
 internal object TzAndroid {
     fun getTimezoneInner(): Result<String> {
-        val fromSystemProperty = getSystemProperty("persist.sys.timezone")
-        if (!fromSystemProperty.isNullOrBlank()) {
-            return Result.success(fromSystemProperty)
+        val key = androidTimezonePropertyName()
+        val fromBionic = getProperties()?.getFromCString(key)
+        if (!fromBionic.isNullOrBlank()) {
+            return Result.success(fromBionic)
         }
-        val id = TimeZone.getDefault().id
-        if (!id.isNullOrBlank()) {
-            return Result.success(id)
+        val fromJvm = JavaTimeZone.getDefault().id
+        return if (fromJvm.isNullOrBlank()) {
+            Result.failure(GetTimezoneError.OsError.toBridge())
+        } else {
+            Result.success(fromJvm)
         }
-        return Result.failure(GetTimezoneError.OsError.toBridge())
     }
 
-    private fun getSystemProperty(key: String): String? = try {
-        val clazz = Class.forName("android.os.SystemProperties")
-        val getMethod = clazz.getMethod("get", String::class.java)
-        val result = getMethod.invoke(null, key) as? String
-        result?.takeIf { it.isNotEmpty() }
-    } catch (_: Throwable) {
-        null
+    private var properties: AndroidSystemProperties? = null
+
+    private fun getProperties(): AndroidSystemProperties? {
+        if (properties == null) {
+            properties = AndroidSystemProperties.new()
+        }
+        return properties
     }
 }
 

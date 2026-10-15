@@ -7,10 +7,11 @@ import kotlin.test.assertTrue
 class PlatformParsingTest {
     @Test
     fun testTzIllumosParsing() {
-        val sampleInit = """
+        val sampleInit =
+            """
             TZ=America/New_York
             CMASK=022
-        """.trimIndent()
+            """.trimIndent()
         val res = TzIllumos.parseInitConfig(sampleInit)
         assertTrue(res.isSuccess)
         assertEquals("America/New_York", res.getOrNull())

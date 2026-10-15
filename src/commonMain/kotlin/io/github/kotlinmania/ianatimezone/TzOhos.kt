@@ -5,7 +5,9 @@ package io.github.kotlinmania.ianatimezone
  * OpenHarmony timezone resolution via Time Service.
  */
 internal object TzOhos {
-    enum class TimeServiceErrCode(val code: Int) {
+    enum class TimeServiceErrCode(
+        val code: Int,
+    ) {
         TimeserviceErrOk(0),
         TimeserviceErrInternalError(13000001),
         TimeserviceErrInvalidParameter(13000002),
