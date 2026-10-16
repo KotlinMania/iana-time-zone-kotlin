@@ -8,9 +8,12 @@ internal actual object Platform {
 }
 
 internal object TzWindows {
+    fun from(orig: WindowsCore.Error): GetTimezoneError =
+        GetTimezoneError.IoError(orig.message ?: orig.toString())
+
     fun getTimezoneInner(): Result<String> {
-        val cal = Calendar.new().getOrElse { return Result.failure(GetTimezoneError.IoError(it.message ?: it.toString()).toBridge()) }
-        val tzHstring = cal.getTimeZone().getOrElse { return Result.failure(GetTimezoneError.IoError(it.message ?: it.toString()).toBridge()) }
+        val cal = Calendar.new().getOrElse { return Result.failure(from(WindowsCore.Error(it.message ?: it.toString())).toBridge()) }
+        val tzHstring = cal.getTimeZone().getOrElse { return Result.failure(from(WindowsCore.Error(it.message ?: it.toString())).toBridge()) }
         return Result.success(tzHstring.toString())
     }
 }

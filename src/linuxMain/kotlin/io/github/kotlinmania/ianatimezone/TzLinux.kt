@@ -20,11 +20,18 @@ internal object TzLinux {
             "../etc/zoneinfo/",
         )
 
+    /**
+     * Resolves the system timezone by checking `/etc/localtime`, `/etc/timezone`,
+     * and OpenWRT `/etc/config/system`.
+     */
     fun getTimezoneInner(): Result<String> =
         etcLocaltime()
             .recoverCatching { etcTimezone().getOrThrow() }
             .recoverCatching { etcConfigSystem().getOrThrow() }
 
+    /**
+     * Resolves timezone from the `/etc/localtime` symbolic link pointing to zoneinfo.
+     */
     @OptIn(ExperimentalForeignApi::class)
     private fun etcLocaltime(): Result<String> {
         val s =
@@ -43,6 +50,9 @@ internal object TzLinux {
         return Result.failure(GetTimezoneError.FailedParsingString.toBridge())
     }
 
+    /**
+     * Resolves timezone by reading the `/etc/timezone` file.
+     */
     private fun etcTimezone(): Result<String> {
         val contents =
             readFileToString("/etc/timezone")
@@ -50,6 +60,9 @@ internal object TzLinux {
         return Result.success(contents.trimEnd())
     }
 
+    /**
+     * Resolves timezone by reading the OpenWRT `/etc/config/system` configuration.
+     */
     private fun etcConfigSystem(): Result<String> {
         val contents =
             readFileToString("/etc/config/system")

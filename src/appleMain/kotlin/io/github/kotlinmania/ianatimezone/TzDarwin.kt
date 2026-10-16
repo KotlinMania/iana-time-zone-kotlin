@@ -43,19 +43,12 @@ internal class SystemTimeZone private constructor(
         cfRelease(ref)
     }
 
+    fun drop() {
+        release()
+    }
+
     /**
-     * Creates a new [SystemTimeZone] by querying the current Darwin system
-     * timezone.
-     *
-     * This function implicitly calls `CFTimeZoneResetSystem` to invalidate the
-     * cached timezone and ensure we always retrieve the current system
-     * timezone.
-     *
-     * Due to CoreFoundation internal caching mechanism, subsequent calls to
-     * `CFTimeZoneCopySystem` do not reflect system timezone changes made while
-     * the process is running. Thus, we explicitly call `CFTimeZoneResetSystem`
-     * first to invalidate the cached value and ensure we always retrieve the
-     * current system timezone.
+     * Get the time zone name as a [StringRef].
      */
     fun name(): StringRef<SystemTimeZone>? {
         val string = cfTimeZoneGetName(ref) ?: return null
@@ -63,6 +56,20 @@ internal class SystemTimeZone private constructor(
     }
 
     companion object {
+        /**
+         * Creates a new [SystemTimeZone] by querying the current Darwin system
+         * timezone.
+         *
+         * This function implicitly calls `CFTimeZoneResetSystem` to invalidate the
+         * cached timezone and ensure we always retrieve the current system
+         * timezone.
+         *
+         * Due to CoreFoundation internal caching mechanism, subsequent calls to
+         * `CFTimeZoneCopySystem` do not reflect system timezone changes made while
+         * the process is running. Thus, we explicitly call `CFTimeZoneResetSystem`
+         * first to invalidate the cached value and ensure we always retrieve the
+         * current system timezone.
+         */
         fun new(): SystemTimeZone? {
             cfTimeZoneResetSystem()
             val value = cfTimeZoneCopySystem() ?: return null
@@ -71,12 +78,17 @@ internal class SystemTimeZone private constructor(
     }
 }
 
+/**
+ * A wrapper around a CFStringRef.
+ */
 internal class StringRef<T> private constructor(
     private val string: CFStringRef,
     private val parent: T,
 ) {
+    /** Returns the string as a UTF-8 string slice if it is already encoded as UTF-8. */
     fun asUtf8(): String? = cfStringGetCStringPtr(string, kCFStringEncodingUTF8)
 
+    /** Converts the string to UTF-8 and stores it in the provided buffer. */
     fun toUtf8(buf: ByteArray): String? {
         val length = cfStringGetLength(string)
         val range = CFRange(location = 0, length = length)

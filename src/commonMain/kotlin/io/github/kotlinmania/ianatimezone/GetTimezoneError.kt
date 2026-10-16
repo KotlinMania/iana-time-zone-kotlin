@@ -1,15 +1,4 @@
-// port-lint: source lib.rs
 package io.github.kotlinmania.ianatimezone
-
-/**
- * Gets the IANA time zone for the current system.
- *
- * This small utility module provides the [getTimezone] function.
- *
- * The resulting [TimezoneResult] is either a [TimezoneResult.Ok] wrapping the
- * IANA zone name or a [TimezoneResult.Failure] wrapping a [GetTimezoneError]
- * describing what went wrong.
- */
 
 /** Error types. */
 sealed class GetTimezoneError {
@@ -51,33 +40,6 @@ sealed class GetTimezoneError {
                 is IoError -> message
                 OsError -> "OsError"
             }
-}
-
-/** Outcome of [getTimezone]. */
-sealed class TimezoneResult {
-    /** The current IANA zone name. */
-    data class Ok(
-        val name: String,
-    ) : TimezoneResult()
-
-    /** Resolution failed; [error] describes why. */
-    data class Failure(
-        val error: GetTimezoneError,
-    ) : TimezoneResult()
-}
-
-/**
- * Gets the current IANA time zone as a [TimezoneResult].
- *
- * See the module-level documentation for a usage example and more details
- * about this function.
- */
-fun getTimezone(): TimezoneResult {
-    val inner = Platform.getTimezoneInner()
-    return inner.fold(
-        onSuccess = { TimezoneResult.Ok(it) },
-        onFailure = { TimezoneResult.Failure(it.toGetTimezoneError()) },
-    )
 }
 
 /**

@@ -1,4 +1,3 @@
-// port-lint: source tz_linux.rs
 package io.github.kotlinmania.ianatimezone
 
 import java.time.ZoneId

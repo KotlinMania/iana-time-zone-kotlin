@@ -4,12 +4,16 @@ package io.github.kotlinmania.ianatimezone
 /** Returned by [readWord] when an opening quote has no matching close. */
 internal data object BrokenQuote : Throwable()
 
+internal fun from(quote: BrokenQuote): GetTimezoneError = GetTimezoneError.FailedParsingString
+
 /**
- * Iterates over all words in an OpenWRT config line.
+ * Iterated over all words in a OpenWRT config line.
  */
 internal class IterWords(
     private var line: String,
 ) {
+    typealias Item = Result<String?>
+
     private var done = false
 
     fun hasNext(): Boolean = !done
