@@ -236,6 +236,8 @@ object WindowsBindings {
                     WindowsCore.invokeHString(this, "TimeZoneAsString", idealLength)
 
                 companion object {
+                    class Vtable
+
                     fun new(): Result<Calendar> =
                         WindowsCore
                             .activationFactory("Windows.Globalization.Calendar")
@@ -376,6 +378,10 @@ object WindowsBindings {
 }
 
 object WindowsCore {
+    class Error(
+        override val message: String? = null,
+    ) : Throwable(message)
+
     open class IUnknown
 
     class IInspectable : IUnknown()
