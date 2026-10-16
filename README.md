@@ -33,16 +33,21 @@ database.
 
 Example:
 
-```rust
+```kotlin
+import io.github.kotlinmania.ianatimezone.TimezoneResult
+import io.github.kotlinmania.ianatimezone.getTimezone
+
 // Get the current time zone as a string.
-let tz_str = iana_time_zone::get_timezone()?;
-println!("The current time zone is: {}", tz_str);
+when (val result = getTimezone()) {
+    is TimezoneResult.Ok -> println("The current time zone is: ${result.name}")
+    is TimezoneResult.Failure -> println("Failed to get time zone: ${result.error}")
+}
 ```
 
 You can test this is working on your platform with:
 
-```
-cargo run --example get_timezone
+```bash
+./gradlew test
 ```
 
 ## Minimum supported rust version policy
